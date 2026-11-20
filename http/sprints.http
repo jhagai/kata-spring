@@ -1,0 +1,31 @@
+### List all sprints (includes the seeded "Sprint 1" / "Sprint 2")
+GET {{baseUrl}}/api/sprints
+
+### Create a sprint
+POST {{baseUrl}}/api/sprints
+Content-Type: application/json
+
+{
+  "name": "Sprint 3",
+  "startDate": "2026-11-01",
+  "endDate": "2026-11-14"
+}
+
+> {%
+    client.global.set("newSprintId", response.body.id);
+%}
+
+### Get the sprint back by id
+GET {{baseUrl}}/api/sprints/{{newSprintId}}
+
+### EXERCISE E demo - sprint statistics (501 until implemented)
+# Replace 1 with the id of the seeded "Sprint 1" if it differs on your machine.
+GET {{baseUrl}}/api/sprints/1/statistics
+
+### EXERCISE F demo - close a sprint and move its unfinished tickets to the next one (501 until implemented)
+POST {{baseUrl}}/api/sprints/1/close
+Content-Type: application/json
+
+{
+  "nextSprintId": 2
+}

@@ -1,0 +1,61 @@
+### Create a ticket in the seeded "Sprint 1" (needs EXERCISE D to actually succeed)
+# This single request only proves the generator works once - it does NOT exercise
+# concurrency; that is only covered by TicketKeyGeneratorConcurrencyTest.
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+
+{
+  "sprintId": 1,
+  "title": "Write more .http requests",
+  "description": "Self-referential, but someone has to do it."
+}
+
+> {%
+    client.global.set("ticketId", response.body.id);
+%}
+
+### EXERCISE A - GET ticket detail with resolved assignee name
+# Run this one to check exercise A: it hits TicketController#getById, which calls
+# GetTicketDetailUseCase -> TicketRepositoryAdapter.findDetailById. 501 until implemented,
+# then watch for LazyInitializationException if the fix is wrong before it is green.
+# Ticket 1 is seeded (KATA-SEED-1, assigned to alice) - replace the id if yours differs.
+GET {{baseUrl}}/api/tickets/1
+
+### EXERCISE C demo - ticket with comments AND tags loaded together (501 until implemented)
+GET {{baseUrl}}/api/tickets/1/full
+
+### EXERCISE B demo - list tickets of a sprint without N+1 queries (501 until implemented)
+GET {{baseUrl}}/api/tickets?sprintId=1
+
+### Add a comment to a ticket
+POST {{baseUrl}}/api/tickets/1/comments
+Content-Type: application/json
+
+{
+  "authorId": 1,
+  "body": "Looks good to me."
+}
+
+### Add a tag to a ticket
+POST {{baseUrl}}/api/tickets/1/tags
+Content-Type: application/json
+
+{
+  "name": "needs-review"
+}
+
+### Assign a ticket to a user
+POST {{baseUrl}}/api/tickets/1/assign
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+### Move a ticket to another sprint
+POST {{baseUrl}}/api/tickets/1/move
+Content-Type: application/json
+
+{
+  "sprintId": 2
+}

@@ -1,0 +1,18 @@
+### Create a user
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "username": "dave",
+  "email": "dave@kata.dev"
+}
+
+> {%
+    client.global.set("userId", response.body.id);
+%}
+
+### Get the user back by id
+GET {{baseUrl}}/api/users/{{userId}}
+
+### List all users (includes the seeded alice/bob/carol)
+GET {{baseUrl}}/api/users
